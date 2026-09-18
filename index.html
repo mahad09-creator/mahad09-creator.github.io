@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mahad Khan — Junior AI Developer</title>
+<meta name="description" content="Portfolio of Mahad Khan — Junior AI Developer specializing in computer vision, .NET development, and workflow automation.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230A1F3D'/%3E%3Cpath d='M20 20h15M20 20v15M80 20H65M80 20v15M20 80h15M20 80V65M80 80H65M80 80V65' stroke='%235FD4E3' stroke-width='6' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A1F3D;
+    --ink-2:#0F2A4D;
+    --ink-3:#123057;
+    --grid-line: rgba(255,255,255,0.055);
+    --fg:#F4F8FC;
+    --muted:#93A9C4;
+    --muted-2:#6D869F;
+    --cyan:#5FD4E3;
+    --cyan-dim: rgba(95,212,227,0.35);
+    --cyan-glow: rgba(95,212,227,0.18);
+    --amber:#F5A623;
+    --border: rgba(255,255,255,0.12);
+    --maxw: 900px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(700px 420px at 82% -8%, rgba(95,212,227,0.10), transparent 60%),
+      radial-gradient(600px 380px at 6% 8%, rgba(245,166,35,0.06), transparent 60%),
+      linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
+      var(--ink);
+    color:var(--fg);
+    font-family:"IBM Plex Sans", system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--cyan); color:var(--ink); }
+  a{ color:inherit; }
+  img{max-width:100%; display:block;}
+
+  h1,h2,h3{ font-family:"Space Grotesk", sans-serif; margin:0; letter-spacing:-0.01em; }
+  .mono{ font-family:"IBM Plex Mono", monospace; }
+
+  .wrap{ max-width: var(--maxw); margin:0 auto; padding:0 28px; }
+
+  /* ---------- nav ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(10,31,61,0.86);
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px; max-width: 1000px;
+  }
+  .brand{ font-family:"Space Grotesk", sans-serif; font-weight:600; font-size:18px; text-decoration:none; display:flex; align-items:center; gap:8px;}
+  .brand .dot{ width:8px; height:8px; background:var(--amber); border-radius:50%; box-shadow:0 0 0 3px rgba(245,166,35,0.18); }
+  .navlinks{ display:flex; gap:30px; list-style:none; margin:0; padding:0; }
+  .navlinks li{ position:relative; }
+  .navlinks a{ text-decoration:none; color:var(--muted); font-size:14.5px; transition:color .18s ease; padding-bottom:4px; }
+  .navlinks a::after{
+    content:""; position:absolute; left:0; bottom:0; width:0%; height:1px; background:var(--cyan);
+    transition:width .25s ease;
+  }
+  .navlinks a:hover{ color:var(--fg); }
+  .navlinks a:hover::after{ width:100%; }
+  .nav-cta{
+    display:flex; align-items:center; gap:10px;
+    padding:8px 14px !important; border:1px solid var(--border); border-radius:6px;
+    color:var(--fg) !important; font-family:"IBM Plex Mono", monospace; font-size:13px !important;
+  }
+  .nav-cta:hover{ border-color:var(--cyan-dim); background:rgba(95,212,227,0.06); }
+  .nav-cta::after{ display:none; }
+  .navtoggle{ display:none; background:none; border:1px solid var(--border); color:var(--fg); width:38px; height:38px; border-radius:6px; cursor:pointer; }
+
+  /* ---------- hero ---------- */
+  .hero{ max-width: 1000px; margin:0 auto; padding: 72px 28px 90px; position:relative; }
+  .hero-grid{ display:grid; grid-template-columns: 1.15fr 0.85fr; gap:40px; align-items:center; }
+  .frame{ position:relative; padding: 44px 8px 8px; }
+  .bracket{ position:absolute; width:22px; height:22px; border-color:var(--cyan); }
+  .bracket.tl{ top:0; left:-4px; border-top:2px solid var(--cyan); border-left:2px solid var(--cyan);}
+  .bracket.tr{ top:0; right:-4px; border-top:2px solid var(--cyan); border-right:2px solid var(--cyan);}
+  .status{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:"IBM Plex Mono", monospace; font-size:12.5px; color:var(--muted);
+    padding:6px 12px; border:1px solid var(--border); border-radius:999px;
+    margin-bottom:26px;
+  }
+  .status .pulse{ width:7px; height:7px; border-radius:50%; background:var(--amber); position:relative; }
+  .status .pulse::after{
+    content:""; position:absolute; inset:-5px; border-radius:50%;
+    border:1px solid var(--amber); animation:ping 2.2s ease-out infinite;
+  }
+  @keyframes ping{ 0%{ transform:scale(.5); opacity:.9;} 100%{ transform:scale(1.9); opacity:0;} }
+
+  .hero h1{ font-size: clamp(38px, 6vw, 62px); font-weight:700; line-height:1.04; color:var(--fg); }
+  .hero h1 span{ color:var(--cyan); }
+  .role-line{ margin-top:14px; font-family:"IBM Plex Mono", monospace; color:var(--muted); font-size:15.5px; }
+  .role-line b{ color:var(--fg); font-weight:500; }
+  .hero p.lede{ max-width:54ch; color:var(--muted); margin-top:22px; font-size:16.5px; }
+
+  .cta-row{ display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:9px;
+    padding:12px 22px; border-radius:6px; font-size:15px; font-weight:500;
+    text-decoration:none; cursor:pointer; border:1px solid transparent;
+    font-family:"IBM Plex Sans", sans-serif;
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
+  }
+  .btn-primary{ background:var(--cyan); color:var(--ink); }
+  .btn-primary:hover{ background:#82e2ee; transform:translateY(-2px); box-shadow:0 10px 26px -8px var(--cyan-glow); }
+  .btn-ghost{ border-color:var(--border); color:var(--fg); }
+  .btn-ghost:hover{ border-color:var(--cyan-dim); background:rgba(95,212,227,0.06); transform:translateY(-2px); }
+  .btn-linkedin{ border-color:var(--border); color:var(--fg); }
+  .btn-linkedin svg{ transition: transform .18s ease; }
+  .btn-linkedin:hover{ border-color:#4a9fd8; background:rgba(74,159,216,0.10); transform:translateY(-2px); box-shadow:0 10px 26px -10px rgba(74,159,216,0.35); }
+  .btn-linkedin:hover svg{ transform:scale(1.08); }
+
+  .scanline{
+    position:absolute; left:8px; right:8px; top:44px; height:2px;
+    background:linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity:0; animation: scan 2.6s ease-in-out .4s 1 forwards;
+  }
+  @keyframes scan{
+    0%{ top:44px; opacity:0; }
+    12%{ opacity:.9; }
+    85%{ opacity:.5; }
+    100%{ top:calc(100% - 10px); opacity:0; }
+  }
+
+  /* hero visual */
+  .hero-visual{ position:relative; display:flex; align-items:center; justify-content:center; }
+  .visual-frame{
+    position:relative; width:100%; max-width:340px; aspect-ratio:1/1;
+    border:1px solid var(--border); border-radius:10px;
+    background: linear-gradient(180deg, rgba(95,212,227,0.06), transparent 70%);
+    display:flex; align-items:center; justify-content:center;
+    transition: border-color .25s ease, box-shadow .25s ease;
+  }
+  .visual-frame:hover{ border-color:var(--cyan-dim); box-shadow:0 0 40px -12px var(--cyan-glow); }
+  .visual-frame .corner{ position:absolute; width:18px; height:18px; }
+  .visual-frame svg{ width:72%; height:72%; }
+  .mesh-node{ transition: r .2s ease, fill .2s ease; }
+  .visual-frame:hover .mesh-node{ fill:var(--cyan); }
+  .visual-frame:hover .mesh-node.n-amber{ fill:var(--amber); }
+  .tag-readout{
+    position:absolute; bottom:14px; left:14px; right:14px;
+    font-family:"IBM Plex Mono", monospace; font-size:11px; color:var(--muted-2);
+    display:flex; justify-content:space-between;
+  }
+
+  /* ---------- sections ---------- */
+  section{ max-width: 1000px; margin:0 auto; padding: 74px 28px; border-top:1px solid var(--border); }
+  .sec-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:40px; }
+  .sec-head .mark{ color:var(--cyan); font-family:"IBM Plex Mono", monospace; font-size:15px; }
+  .sec-head h2{ font-size: 28px; font-weight:600; }
+  .sec-sub{ color:var(--muted); max-width:60ch; margin: -22px 0 40px; font-size:15.5px; }
+
+  /* about */
+  .about-grid{ display:grid; grid-template-columns: 1.5fr 1fr; gap:48px; align-items:start; }
+  .about-grid p{ color:var(--muted); font-size:16px; }
+  .about-grid p + p{ margin-top:14px; }
+  .stat-list{ display:flex; flex-direction:column; gap:18px; }
+  .stat{
+    border-left:2px solid var(--cyan-dim); padding:6px 0 6px 16px;
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .stat:hover{ border-color:var(--cyan); transform:translateX(4px); }
+  .stat .num{ font-family:"Space Grotesk", sans-serif; font-size:34px; font-weight:700; color:var(--fg); }
+  .stat .lbl{ color:var(--muted-2); font-size:13.5px; margin-top:2px; }
+
+  /* experience */
+  .timeline{ position:relative; padding-left:28px; }
+  .timeline::before{ content:""; position:absolute; left:5px; top:6px; bottom:6px; width:1px; background:var(--border); }
+  .tl-item{ position:relative; padding:10px 14px 26px 14px; margin-left:-14px; border-radius:8px; transition: background .2s ease; }
+  .tl-item:hover{ background:rgba(95,212,227,0.045); }
+  .tl-item:last-child{ padding-bottom:10px; }
+  .tl-item::before{
+    content:""; position:absolute; left:-28px; top:15px; width:11px; height:11px;
+    border-radius:50%; background:var(--ink); border:2px solid var(--cyan);
+    transition: box-shadow .2s ease, background .2s ease;
+  }
+  .tl-item:hover::before{ background:var(--cyan); box-shadow:0 0 0 4px var(--cyan-glow); }
+  .tl-date{ font-family:"IBM Plex Mono", monospace; font-size:13px; color:var(--amber); margin-bottom:6px; display:block;}
+  .tl-role{ font-size:18px; font-weight:600; font-family:"Space Grotesk", sans-serif; }
+  .tl-org{ color:var(--muted); font-size:14.5px; margin-top:2px; margin-bottom:10px;}
+  .tl-desc{ color:var(--muted); font-size:15px; max-width:62ch; }
+
+  /* projects */
+  .proj-featured{
+    border:1px solid var(--border); border-radius:8px; padding:32px;
+    position:relative; margin-bottom:22px;
+    background: linear-gradient(180deg, rgba(95,212,227,0.05), transparent 60%);
+    transition: box-shadow .25s ease, border-color .25s ease;
+  }
+  .proj-featured:hover{ border-color:var(--cyan-dim); box-shadow:0 18px 50px -22px var(--cyan-glow); }
+  .corner{ position:absolute; width:16px; height:16px; transition: width .2s ease, height .2s ease; }
+  .corner.c1{ top:-1px; left:-1px; border-top:2px solid var(--cyan); border-left:2px solid var(--cyan); border-radius:8px 0 0 0;}
+  .corner.c2{ top:-1px; right:-1px; border-top:2px solid var(--cyan); border-right:2px solid var(--cyan); border-radius:0 8px 0 0;}
+  .corner.c3{ bottom:-1px; left:-1px; border-bottom:2px solid var(--cyan); border-left:2px solid var(--cyan); border-radius:0 0 0 8px;}
+  .corner.c4{ bottom:-1px; right:-1px; border-bottom:2px solid var(--cyan); border-right:2px solid var(--cyan); border-radius:0 0 8px 0;}
+  .proj-featured:hover .corner{ width:22px; height:22px; }
+  .proj-tag{ font-family:"IBM Plex Mono", monospace; font-size:12px; color:var(--cyan); }
+  .proj-featured h3{ font-size:24px; margin-top:8px; }
+  .proj-featured .tl-desc{ margin-top:10px; }
+  .proj-list{ list-style:none; margin:14px 0 0; padding:0; display:grid; gap:7px; }
+  .proj-list li{ color:var(--muted); font-size:14.5px; padding-left:16px; position:relative; transition:color .18s ease, padding-left .18s ease; }
+  .proj-list li:hover{ color:var(--fg); padding-left:20px; }
+  .proj-list li::before{ content:"—"; position:absolute; left:0; color:var(--muted-2); }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
+  .chip{
+    font-family:"IBM Plex Mono", monospace; font-size:12.5px; color:var(--muted);
+    border:1px solid var(--border); padding:4px 10px; border-radius:4px;
+    transition: color .18s ease, border-color .18s ease, background .18s ease;
+  }
+  .chip:hover{ color:var(--cyan); border-color:var(--cyan-dim); background:rgba(95,212,227,0.08); }
+  .proj-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:18px; }
+  .proj-card{
+    border:1px solid var(--border); border-radius:8px; padding:22px; position:relative;
+    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+  }
+  .proj-card::before{
+    content:""; position:absolute; top:-1px; left:-1px; width:14px; height:14px;
+    border-top:2px solid transparent; border-left:2px solid transparent;
+    border-radius:8px 0 0 0; transition: border-color .2s ease;
+  }
+  .proj-card:hover{ border-color:var(--cyan-dim); transform:translateY(-4px); box-shadow:0 16px 36px -20px var(--cyan-glow); }
+  .proj-card:hover::before{ border-color:var(--cyan); }
+  .proj-card h4{ font-family:"Space Grotesk", sans-serif; font-size:17px; margin-top:6px; }
+  .proj-card p{ color:var(--muted); font-size:14px; margin-top:8px; }
+
+  /* skills */
+  .skill-groups{ display:grid; grid-template-columns: 1fr 1fr; gap:28px 40px; }
+  .skill-group h4{ font-family:"IBM Plex Mono", monospace; font-weight:400; color:var(--amber); font-size:13px; margin-bottom:12px; }
+  .skill-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .skill-tags span{
+    font-size:14px; color:var(--fg); border:1px solid var(--border); padding:6px 12px; border-radius:5px;
+    transition: background .18s ease, border-color .18s ease, transform .18s ease;
+  }
+  .skill-tags span:hover{ background:rgba(95,212,227,0.10); border-color:var(--cyan-dim); transform:translateY(-2px); }
+
+  /* education */
+  .edu-cert-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:40px; }
+  .edu-item{ margin-bottom:20px; padding:8px 10px; margin-left:-10px; border-radius:6px; transition:background .18s ease; }
+  .edu-item:hover{ background:rgba(95,212,227,0.045); }
+  .edu-item:last-child{ margin-bottom:0; }
+  .edu-item .tl-date{ margin-bottom:2px; }
+  .edu-item .tl-role{ font-size:16px; }
+  .edu-item .tl-org{ margin-bottom:0; }
+  .cert-item{ display:flex; justify-content:space-between; gap:12px; padding:12px 4px; border-bottom:1px solid var(--border); transition:background .18s ease; }
+  .cert-item:hover{ background:rgba(95,212,227,0.045); }
+  .cert-item:last-child{ border-bottom:none; }
+  .cert-item .name{ font-size:14.5px; }
+  .cert-item .issuer{ font-family:"IBM Plex Mono", monospace; font-size:12.5px; color:var(--muted-2); white-space:nowrap; }
+
+  /* contact */
+  .contact-box{
+    border:1px solid var(--border); border-radius:10px; padding:44px;
+    display:flex; flex-wrap:wrap; justify-content:space-between; gap:28px; align-items:center;
+    position:relative; overflow:hidden;
+    transition: border-color .25s ease, box-shadow .25s ease;
+  }
+  .contact-box:hover{ border-color:var(--cyan-dim); box-shadow:0 20px 60px -30px var(--cyan-glow); }
+  .contact-box h2{ font-size:26px; max-width:15ch; }
+  .contact-links{ display:flex; flex-direction:column; gap:12px; align-items:flex-start; }
+  .contact-links a.mono-link{ text-decoration:none; font-family:"IBM Plex Mono", monospace; font-size:14.5px; color:var(--muted); position:relative; padding-bottom:2px; }
+  .contact-links a.mono-link::after{ content:""; position:absolute; left:0; bottom:0; width:0%; height:1px; background:var(--cyan); transition:width .25s ease; }
+  .contact-links a.mono-link:hover{ color:var(--cyan); }
+  .contact-links a.mono-link:hover::after{ width:100%; }
+
+  .btn-linkedin-solid{
+    display:inline-flex; align-items:center; gap:9px;
+    padding:11px 20px; border-radius:6px; font-size:14.5px; font-weight:500;
+    text-decoration:none; border:1px solid var(--border); color:var(--fg);
+    font-family:"IBM Plex Sans", sans-serif;
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
+  }
+  .btn-linkedin-solid:hover{ border-color:#4a9fd8; background:rgba(74,159,216,0.10); transform:translateY(-2px); box-shadow:0 10px 26px -10px rgba(74,159,216,0.35); }
+
+  footer{ max-width:1000px; margin:0 auto; padding:32px 28px 48px; color:var(--muted-2); font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  footer a{ text-decoration:none; color:var(--muted-2); transition:color .18s ease; }
+  footer a:hover{ color:var(--cyan); }
+
+  button.btn{ font-family:"IBM Plex Sans", sans-serif; font-size:15px; }
+
+  /* ---------- contact modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(6,16,32,0.72); backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:100;
+  }
+  .modal-overlay.open{ opacity:1; pointer-events:auto; }
+  .modal-box{
+    position:relative; width:100%; max-width:400px;
+    background:var(--ink-2); border:1px solid var(--border); border-radius:10px;
+    padding:32px; transform:translateY(10px) scale(.98); transition:transform .22s ease;
+  }
+  .modal-overlay.open .modal-box{ transform:translateY(0) scale(1); }
+  .modal-box .corner{ position:absolute; width:16px; height:16px; }
+  .modal-box .corner.c1{ top:-1px; left:-1px; border-top:2px solid var(--cyan); border-left:2px solid var(--cyan); border-radius:10px 0 0 0;}
+  .modal-box .corner.c4{ bottom:-1px; right:-1px; border-bottom:2px solid var(--cyan); border-right:2px solid var(--cyan); border-radius:0 0 10px 0;}
+  .modal-close{
+    position:absolute; top:14px; right:14px; width:30px; height:30px; border-radius:6px;
+    border:1px solid var(--border); background:none; color:var(--muted); cursor:pointer;
+    font-size:16px; line-height:1; transition:border-color .18s ease, color .18s ease;
+  }
+  .modal-close:hover{ border-color:var(--cyan-dim); color:var(--fg); }
+  .modal-box h3{ font-size:20px; margin-bottom:6px; }
+  .modal-box .modal-sub{ color:var(--muted); font-size:14px; margin-bottom:24px; }
+  .modal-row{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    border:1px solid var(--border); border-radius:8px; padding:13px 16px; margin-bottom:12px;
+    transition:border-color .18s ease, background .18s ease;
+  }
+  .modal-row:hover{ border-color:var(--cyan-dim); background:rgba(95,212,227,0.05); }
+  .modal-row .mr-info{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .modal-row .mr-label{ font-family:"IBM Plex Mono", monospace; font-size:11px; color:var(--muted-2); }
+  .modal-row .mr-value{ font-size:14.5px; color:var(--fg); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .mr-copy{
+    flex-shrink:0; font-family:"IBM Plex Mono", monospace; font-size:12px; color:var(--cyan);
+    background:none; border:1px solid var(--cyan-dim); border-radius:5px; padding:6px 11px; cursor:pointer;
+    transition:background .18s ease, color .18s ease;
+  }
+  .mr-copy:hover{ background:rgba(95,212,227,0.12); }
+  .mr-copy.copied{ color:var(--amber); border-color:var(--amber); }
+  .modal-linkedin{
+    display:flex; align-items:center; justify-content:center; gap:9px; width:100%;
+    margin-top:6px; padding:12px; border-radius:8px; border:1px solid var(--border);
+    color:var(--fg); text-decoration:none; font-size:14.5px;
+    transition:border-color .18s ease, background .18s ease, transform .18s ease;
+  }
+  .modal-linkedin:hover{ border-color:#4a9fd8; background:rgba(74,159,216,0.10); transform:translateY(-2px); }
+
+  @media (max-width: 760px){
+    .navlinks{
+      position:absolute; top:64px; left:0; right:0; flex-direction:column;
+      background:var(--ink-2); padding:18px 28px; gap:18px; border-bottom:1px solid var(--border);
+      display:none;
+    }
+    .navlinks.open{ display:flex; }
+    .navtoggle{ display:block; }
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-visual{ order:-1; margin-bottom:12px; }
+    .visual-frame{ max-width:220px; }
+    .about-grid, .skill-groups, .edu-cert-grid, .proj-grid{ grid-template-columns:1fr; }
+    .contact-box{ flex-direction:column; align-items:flex-start; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .scanline, .status .pulse::after{ animation:none; }
+    *{ transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="#top" class="brand"><span class="dot"></span>Mahad Khan</a>
+    <ul class="navlinks" id="navlinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a class="nav-cta" href="https://www.linkedin.com/in/mahad-khan-618b0226b?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.44-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+        LinkedIn
+      </a></li>
+    </ul>
+    <button class="navtoggle" id="navtoggle" aria-label="Toggle menu">≡</button>
+  </nav>
+</header>
+
+<div id="top" class="hero">
+  <div class="hero-grid">
+    <div class="frame">
+      <span class="bracket tl"></span>
+      <span class="bracket tr"></span>
+      <div class="scanline"></div>
+
+      <div class="status"><span class="pulse"></span>Open to junior AI developer roles</div>
+
+      <h1>Mahad Khan.<br>Building with <span>AI &amp; automation.</span></h1>
+      <div class="role-line">Computer Science graduate — <b>AI / ML</b> · <b>.NET Development</b> · <b>Workflow Automation</b></div>
+      <p class="lede">I design and ship systems that see, decide, and act — from a facial-recognition platform that helps locate missing persons, to automated .NET applications that run real workflows end to end.</p>
+
+      <div class="cta-row">
+        <a href="#projects" class="btn btn-primary">View my projects</a>
+        <button type="button" class="btn btn-ghost" id="openContactModal">Get in touch</button>
+        <a href="https://www.linkedin.com/in/mahad-khan-618b0226b?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer" class="btn btn-linkedin">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.44-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="visual-frame">
+        <span class="corner" style="top:10px;left:10px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan);"></span>
+        <span class="corner" style="top:10px;right:10px;border-top:2px solid var(--cyan);border-right:2px solid var(--cyan);"></span>
+        <span class="corner" style="bottom:10px;left:10px;border-bottom:2px solid var(--cyan);border-left:2px solid var(--cyan);"></span>
+        <span class="corner" style="bottom:10px;right:10px;border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan);"></span>
+        <svg viewBox="0 0 200 200" fill="none">
+          <!-- abstract face-landmark mesh, inspired by the facial-recognition project -->
+          <ellipse cx="100" cy="95" rx="55" ry="70" stroke="var(--muted-2)" stroke-width="1" stroke-dasharray="3 4" opacity="0.5"/>
+          <g stroke="var(--muted-2)" stroke-width="1" opacity="0.55">
+            <line x1="70" y1="80" x2="90" y2="85"/>
+            <line x1="110" y1="85" x2="130" y2="80"/>
+            <line x1="90" y1="85" x2="100" y2="100"/>
+            <line x1="110" y1="85" x2="100" y2="100"/>
+            <line x1="100" y1="100" x2="100" y2="120"/>
+            <line x1="100" y1="120" x2="80" y2="135"/>
+            <line x1="100" y1="120" x2="120" y2="135"/>
+            <line x1="80" y1="135" x2="120" y2="135"/>
+            <line x1="70" y1="80" x2="60" y2="100"/>
+            <line x1="130" y1="80" x2="140" y2="100"/>
+            <line x1="60" y1="100" x2="80" y2="135"/>
+            <line x1="140" y1="100" x2="120" y2="135"/>
+          </g>
+          <g class="mesh-node" fill="var(--muted)">
+            <circle class="mesh-node" cx="70" cy="80" r="3"/>
+            <circle class="mesh-node" cx="90" cy="85" r="3"/>
+            <circle class="mesh-node" cx="110" cy="85" r="3"/>
+            <circle class="mesh-node" cx="130" cy="80" r="3"/>
+            <circle class="mesh-node n-amber" cx="100" cy="100" r="3.5" fill="var(--amber)"/>
+            <circle class="mesh-node" cx="100" cy="120" r="3"/>
+            <circle class="mesh-node" cx="80" cy="135" r="3"/>
+            <circle class="mesh-node" cx="120" cy="135" r="3"/>
+            <circle class="mesh-node" cx="60" cy="100" r="3"/>
+            <circle class="mesh-node" cx="140" cy="100" r="3"/>
+          </g>
+        </svg>
+        <div class="tag-readout"><span>SCAN_01.JPG</span><span>MATCH 98.2%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="about">
+  <div class="sec-head"><span class="mark">//</span><h2>About</h2></div>
+  <div class="about-grid">
+    <div>
+      <p>I'm a Computer Science graduate from Iqra University, Karachi, with hands-on experience across AI/ML, .NET development, and cloud automation. My Final Year Project, locAIte, combines facial recognition with real-time CCTV analysis to help recover missing persons — the kind of applied AI work that got me hooked on building systems that solve real problems, not just demos.</p>
+      <p>Alongside that, I've built and shipped several database-driven .NET applications, automated workflows with n8n, and worked across the full stack — from SQL Server backends to React and JavaScript frontends. I'm now looking to bring that mix of AI curiosity and engineering discipline to a junior AI developer role.</p>
+    </div>
+    <div class="stat-list">
+      <div class="stat"><div class="num">33+</div><div class="lbl">Projects &amp; websites delivered — freelance and university combined</div></div>
+      <div class="stat"><div class="num">4</div><div class="lbl">Professional roles held since 2022</div></div>
+      <div class="stat"><div class="num">2</div><div class="lbl">Core frameworks — ASP.NET Core &amp; React</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="sec-head"><span class="mark">//</span><h2>Experience</h2></div>
+  <div class="timeline">
+    <div class="tl-item">
+      <span class="tl-date">JUL 2025 — FEB 2026</span>
+      <div class="tl-role">Senior Web Developer &amp; Project Manager</div>
+      <div class="tl-org">Techcare Solution · Karachi, PK</div>
+      <p class="tl-desc">Led front-end development and project delivery for multiple client websites, overseeing theme customization and design consistency, and coordinating with clients to align builds with business goals.</p>
+    </div>
+    <div class="tl-item">
+      <span class="tl-date">DEC 2024 — JUL 2025</span>
+      <div class="tl-role">Web Developer</div>
+      <div class="tl-org">Digital Techsforge · Karachi, PK</div>
+      <p class="tl-desc">Built responsive, cross-device websites using HTML, CSS, and JavaScript, with a focus on clean layouts and page-speed performance across client projects.</p>
+    </div>
+    <div class="tl-item">
+      <span class="tl-date">DEC 2022 — FEB 2024</span>
+      <div class="tl-role">Surveillance Operator</div>
+      <div class="tl-org">Fasttech Innovators · Karachi, PK</div>
+      <p class="tl-desc">Monitored and analyzed surveillance data for U.S.-based retail stores, identifying operational patterns that contributed to improved client satisfaction and business growth.</p>
+    </div>
+    <div class="tl-item">
+      <span class="tl-date">FEB 2022 — SEP 2022</span>
+      <div class="tl-role">Sales &amp; Customer Service Representative</div>
+      <div class="tl-org">MBE · Karachi, PK</div>
+      <p class="tl-desc">Represented POS and ATM machine products to customers across Canada, building early experience in client communication and problem-solving under a business context.</p>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="sec-head"><span class="mark">//</span><h2>Projects</h2></div>
+  <p class="sec-sub">A selection of AI, database, and cloud-deployed systems — spanning a Final Year Project through to coursework applied as production-style builds.</p>
+
+  <div class="proj-featured">
+    <span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span><span class="corner c4"></span>
+    <span class="proj-tag">FEATURED · FINAL YEAR PROJECT</span>
+    <h3>locAIte — AI Missing Person Recovery Platform</h3>
+    <p class="tl-desc">An AI-based platform built to help recover missing persons by combining computer vision with real-time monitoring. Deployed live and defended as a full FYDP report and presentation.</p>
+    <ul class="proj-list">
+      <li>Facial recognition using MTCNN + FaceNet to match faces from images and live CCTV feeds</li>
+      <li>Facebook NLP sighting monitor that scans social posts for potential sighting matches</li>
+      <li>Centralized case-management system for tracking and updating reported cases</li>
+      <li>Live-deployed web platform, backed by a ~23,500-word technical report and project defense</li>
+    </ul>
+    <div class="chips"><span class="chip">python</span><span class="chip">mtcnn</span><span class="chip">facenet</span><span class="chip">nlp</span><span class="chip">computer vision</span></div>
+  </div>
+
+  <div class="proj-grid">
+    <div class="proj-card">
+      <span class="proj-tag">DBMS LAB PROJECT</span>
+      <h4>Hospital Management System</h4>
+      <p>Full-stack hospital records system with automated workflows for patient and data handling.</p>
+      <div class="chips"><span class="chip">asp.net core mvc</span><span class="chip">ef core</span><span class="chip">n8n</span></div>
+    </div>
+    <div class="proj-card">
+      <span class="proj-tag">OPEN-ENDED LAB</span>
+      <h4>ShopEase — Order &amp; Customer Management</h4>
+      <p>E-commerce database system handling order processing and customer records at scale.</p>
+      <div class="chips"><span class="chip">sql server</span><span class="chip">asp.net core mvc</span></div>
+    </div>
+    <div class="proj-card">
+      <span class="proj-tag">CLOUD / PDC PROJECT</span>
+      <h4>CloudScale — AWS Web App Deployment</h4>
+      <p>Web application deployed on EC2 with a load balancer configured for scalability and fault tolerance.</p>
+      <div class="chips"><span class="chip">aws ec2</span><span class="chip">load balancer</span></div>
+    </div>
+    <div class="proj-card">
+      <span class="proj-tag">FULL-STACK BUILD</span>
+      <h4>Library Management System</h4>
+      <p>Book cataloging, member management, and issue/return tracking with a normalized database schema.</p>
+      <div class="chips"><span class="chip">asp.net core mvc</span><span class="chip">mysql</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="sec-head"><span class="mark">//</span><h2>Skills</h2></div>
+  <div class="skill-groups">
+    <div class="skill-group">
+      <h4>AI / ML &amp; AUTOMATION</h4>
+      <div class="skill-tags"><span>Facial Recognition</span><span>MTCNN</span><span>FaceNet</span><span>NLP</span><span>n8n Automation</span></div>
+    </div>
+    <div class="skill-group">
+      <h4>.NET &amp; BACKEND</h4>
+      <div class="skill-tags"><span>ASP.NET Core MVC</span><span>Entity Framework Core</span><span>Python</span></div>
+    </div>
+    <div class="skill-group">
+      <h4>FRONTEND</h4>
+      <div class="skill-tags"><span>JavaScript</span><span>React.js</span><span>HTML5 / CSS3</span></div>
+    </div>
+    <div class="skill-group">
+      <h4>DATABASES</h4>
+      <div class="skill-tags"><span>SQL Server</span><span>MySQL</span><span>Oracle</span><span>MongoDB</span></div>
+    </div>
+    <div class="skill-group">
+      <h4>CLOUD &amp; PLATFORMS</h4>
+      <div class="skill-tags"><span>AWS EC2</span><span>Load Balancer</span><span>WordPress</span><span>Power BI</span></div>
+    </div>
+    <div class="skill-group">
+      <h4>WORKING STYLE</h4>
+      <div class="skill-tags"><span>Time Management</span><span>Task Collaboration</span><span>Problem Solving</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="sec-head"><span class="mark">//</span><h2>Education &amp; Certifications</h2></div>
+  <div class="edu-cert-grid">
+    <div>
+      <div class="edu-item">
+        <span class="tl-date">2022 — 2026</span>
+        <div class="tl-role">B.S. Computer Science</div>
+        <div class="tl-org">Iqra University, Karachi</div>
+      </div>
+      <div class="edu-item">
+        <span class="tl-date">2019 — 2022</span>
+        <div class="tl-role">Intermediate, Pre-Engineering</div>
+        <div class="tl-org">Govt. Degree College of Boys, Gulistan-e-Jauhar</div>
+      </div>
+      <div class="edu-item">
+        <span class="tl-date">2013 — 2019</span>
+        <div class="tl-role">Matriculation, Science</div>
+        <div class="tl-org">S.M. Public Academy</div>
+      </div>
+    </div>
+    <div>
+      <div class="cert-item"><span class="name">Responsive Web Design</span><span class="issuer">freeCodeCamp</span></div>
+      <div class="cert-item"><span class="name">JavaScript Algorithms and Data Structures</span><span class="issuer">freeCodeCamp</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact-box">
+    <h2>Let's build something intelligent together.</h2>
+    <div class="contact-links">
+      <a class="mono-link" href="mailto:meetmahad09@gmail.com">meetmahad09@gmail.com</a>
+      <a class="mono-link" href="tel:+923433782786">+92 343 3782786</a>
+      <span class="mono" style="color:var(--muted-2); font-size:14.5px;">Gulshan-e-Iqbal, Karachi, Pakistan</span>
+      <a class="btn-linkedin-solid" href="https://www.linkedin.com/in/mahad-khan-618b0226b?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.44-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+        Connect on LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Mahad Khan.</span>
+  <a href="#top">Back to top ↑</a>
+</footer>
+
+<div class="modal-overlay" id="contactModal" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <span class="corner c1"></span><span class="corner c4"></span>
+    <button class="modal-close" id="closeContactModal" aria-label="Close">✕</button>
+    <h3 id="modalTitle">Let's talk.</h3>
+    <p class="modal-sub">Reach out directly — copy a detail or connect on LinkedIn.</p>
+
+    <div class="modal-row">
+      <div class="mr-info">
+        <span class="mr-label">EMAIL</span>
+        <span class="mr-value">meetmahad09@gmail.com</span>
+      </div>
+      <button class="mr-copy" data-copy="meetmahad09@gmail.com">Copy</button>
+    </div>
+
+    <div class="modal-row">
+      <div class="mr-info">
+        <span class="mr-label">PHONE</span>
+        <span class="mr-value">+92 343 3782786</span>
+      </div>
+      <button class="mr-copy" data-copy="+923433782786">Copy</button>
+    </div>
+
+    <a class="modal-linkedin" href="https://www.linkedin.com/in/mahad-khan-618b0226b?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.44-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+      Connect on LinkedIn
+    </a>
+  </div>
+</div>
+
+<script>
+  const toggle = document.getElementById('navtoggle');
+  const links = document.getElementById('navlinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+  const modal = document.getElementById('contactModal');
+  const openBtn = document.getElementById('openContactModal');
+  const closeBtn = document.getElementById('closeContactModal');
+
+  function openModal(){
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  openBtn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+  document.querySelectorAll('.mr-copy').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.getAttribute('data-copy');
+      try{
+        await navigator.clipboard.writeText(text);
+      }catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); document.body.removeChild(ta);
+      }
+      const original = btn.textContent;
+      btn.textContent = 'Copied'; btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1600);
+    });
+  });
+</script>
+
+</body>
+</html>

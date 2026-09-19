@@ -45,6 +45,28 @@
   a{ color:inherit; }
   img{max-width:100%; display:block;}
 
+  /* ---------- ambient background ---------- */
+  .ambient{ position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; }
+  .blob{ position:absolute; border-radius:50%; filter:blur(90px); opacity:.35; }
+  .blob-1{ width:480px; height:480px; background:radial-gradient(circle, var(--cyan), transparent 70%); top:-140px; left:-120px; animation: drift1 22s ease-in-out infinite; }
+  .blob-2{ width:420px; height:420px; background:radial-gradient(circle, var(--amber), transparent 70%); bottom:-160px; right:-100px; opacity:.20; animation: drift2 26s ease-in-out infinite; }
+  @keyframes drift1{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(60px,50px) scale(1.15); } }
+  @keyframes drift2{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(-50px,-40px) scale(1.1); } }
+
+  .cursor-glow{
+    position:absolute; width:420px; height:420px; border-radius:50%; pointer-events:none;
+    background:radial-gradient(circle, rgba(95,212,227,0.12), transparent 70%);
+    transform:translate(-50%,-50%); opacity:0; transition:opacity .3s ease; z-index:0;
+  }
+
+  /* ---------- scroll reveal ---------- */
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .65s cubic-bezier(.2,.7,.3,1), transform .65s cubic-bezier(.2,.7,.3,1); }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+    .blob{ animation:none; }
+  }
+
   h1,h2,h3{ font-family:"Space Grotesk", sans-serif; margin:0; letter-spacing:-0.01em; }
   .mono{ font-family:"IBM Plex Mono", monospace; }
 
@@ -148,14 +170,26 @@
   .visual-frame:hover{ border-color:var(--cyan-dim); box-shadow:0 0 40px -12px var(--cyan-glow); }
   .visual-frame .corner{ position:absolute; width:18px; height:18px; }
   .visual-frame svg{ width:72%; height:72%; }
-  .mesh-node{ transition: r .2s ease, fill .2s ease; }
+  .mesh-node{ transition: r .2s ease, fill .2s ease; animation: nodePulse 3s ease-in-out infinite; }
+  .mesh-node.n-amber{ animation: nodePulseAmber 2.4s ease-in-out infinite; }
+  @keyframes nodePulse{ 0%,100%{ opacity:.7; } 50%{ opacity:1; } }
+  @keyframes nodePulseAmber{ 0%,100%{ r:3.5; opacity:.8; } 50%{ r:4.6; opacity:1; } }
   .visual-frame:hover .mesh-node{ fill:var(--cyan); }
   .visual-frame:hover .mesh-node.n-amber{ fill:var(--amber); }
+  .mesh-scan{
+    position:absolute; left:14%; right:14%; height:2px;
+    background:linear-gradient(90deg, transparent, var(--cyan), transparent);
+    animation: meshScan 3.4s ease-in-out infinite; opacity:.75;
+  }
+  @keyframes meshScan{ 0%{ top:18%; opacity:0; } 15%{ opacity:.8; } 85%{ opacity:.3; } 100%{ top:82%; opacity:0; } }
   .tag-readout{
     position:absolute; bottom:14px; left:14px; right:14px;
     font-family:"IBM Plex Mono", monospace; font-size:11px; color:var(--muted-2);
     display:flex; justify-content:space-between;
   }
+  .tag-readout .live-dot{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--amber); margin-right:5px; animation:ping 1.8s ease-out infinite; position:relative; top:-1px; }
+  .cycle-wrap{ margin-top:16px; font-family:"IBM Plex Mono", monospace; font-size:14.5px; color:var(--muted-2); }
+  .cycle-word{ color:var(--cyan); border-right:2px solid var(--cyan); padding-right:3px; }
 
   /* ---------- sections ---------- */
   section{ max-width: 1000px; margin:0 auto; padding: 74px 28px; border-top:1px solid var(--border); }
@@ -225,7 +259,8 @@
   .proj-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:18px; }
   .proj-card{
     border:1px solid var(--border); border-radius:8px; padding:22px; position:relative;
-    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+    transition: border-color .2s ease, transform .12s ease, box-shadow .2s ease;
+    transform-style:preserve-3d; will-change:transform;
   }
   .proj-card::before{
     content:""; position:absolute; top:-1px; left:-1px; width:14px; height:14px;
@@ -361,6 +396,8 @@
 </head>
 <body>
 
+<div class="ambient"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+
 <header>
   <nav class="wrap">
     <a href="#top" class="brand"><span class="dot"></span>Mahad Khan</a>
@@ -380,6 +417,7 @@
 </header>
 
 <div id="top" class="hero">
+  <div class="cursor-glow" id="cursorGlow"></div>
   <div class="hero-grid">
     <div class="frame">
       <span class="bracket tl"></span>
@@ -390,6 +428,7 @@
 
       <h1>Mahad Khan.<br>Building with <span>AI &amp; automation.</span></h1>
       <div class="role-line">Computer Science graduate — <b>AI / ML</b> · <b>.NET Development</b> · <b>Workflow Automation</b></div>
+      <div class="cycle-wrap">currently building → <span class="cycle-word" id="cycleWord">facial recognition</span></div>
       <p class="lede">I design and ship systems that see, decide, and act — from a facial-recognition platform that helps locate missing persons, to automated .NET applications that run real workflows end to end.</p>
 
       <div class="cta-row">
@@ -438,49 +477,50 @@
             <circle class="mesh-node" cx="140" cy="100" r="3"/>
           </g>
         </svg>
-        <div class="tag-readout"><span>SCAN_01.JPG</span><span>MATCH 98.2%</span></div>
+        <div class="mesh-scan"></div>
+        <div class="tag-readout"><span><span class="live-dot"></span>SCAN_01.JPG</span><span>MATCH 98.2%</span></div>
       </div>
     </div>
   </div>
 </div>
 
 <section id="about">
-  <div class="sec-head"><span class="mark">//</span><h2>About</h2></div>
+  <div class="sec-head reveal"><span class="mark">//</span><h2>About</h2></div>
   <div class="about-grid">
     <div>
       <p>I'm a Computer Science graduate from Iqra University, Karachi, with hands-on experience across AI/ML, .NET development, and cloud automation. My Final Year Project, locAIte, combines facial recognition with real-time CCTV analysis to help recover missing persons — the kind of applied AI work that got me hooked on building systems that solve real problems, not just demos.</p>
       <p>Alongside that, I've built and shipped several database-driven .NET applications, automated workflows with n8n, and worked across the full stack — from SQL Server backends to React and JavaScript frontends. I'm now looking to bring that mix of AI curiosity and engineering discipline to a junior AI developer role.</p>
     </div>
     <div class="stat-list">
-      <div class="stat"><div class="num">33+</div><div class="lbl">Projects &amp; websites delivered — freelance and university combined</div></div>
-      <div class="stat"><div class="num">4</div><div class="lbl">Professional roles held since 2022</div></div>
-      <div class="stat"><div class="num">2</div><div class="lbl">Core frameworks — ASP.NET Core &amp; React</div></div>
+      <div class="stat reveal"><div class="num" data-count="33" data-suffix="+">0+</div><div class="lbl">Projects &amp; websites delivered — freelance and university combined</div></div>
+      <div class="stat reveal"><div class="num" data-count="4" data-suffix="">0</div><div class="lbl">Professional roles held since 2022</div></div>
+      <div class="stat reveal"><div class="num" data-count="2" data-suffix="">0</div><div class="lbl">Core frameworks — ASP.NET Core &amp; React</div></div>
     </div>
   </div>
 </section>
 
 <section id="experience">
-  <div class="sec-head"><span class="mark">//</span><h2>Experience</h2></div>
+  <div class="sec-head reveal"><span class="mark">//</span><h2>Experience</h2></div>
   <div class="timeline">
-    <div class="tl-item">
+    <div class="tl-item reveal">
       <span class="tl-date">JUL 2025 — FEB 2026</span>
       <div class="tl-role">Senior Web Developer &amp; Project Manager</div>
       <div class="tl-org">Techcare Solution · Karachi, PK</div>
       <p class="tl-desc">Led front-end development and project delivery for multiple client websites, overseeing theme customization and design consistency, and coordinating with clients to align builds with business goals.</p>
     </div>
-    <div class="tl-item">
+    <div class="tl-item reveal">
       <span class="tl-date">DEC 2024 — JUL 2025</span>
       <div class="tl-role">Web Developer</div>
       <div class="tl-org">Digital Techsforge · Karachi, PK</div>
       <p class="tl-desc">Built responsive, cross-device websites using HTML, CSS, and JavaScript, with a focus on clean layouts and page-speed performance across client projects.</p>
     </div>
-    <div class="tl-item">
+    <div class="tl-item reveal">
       <span class="tl-date">DEC 2022 — FEB 2024</span>
       <div class="tl-role">Surveillance Operator</div>
       <div class="tl-org">Fasttech Innovators · Karachi, PK</div>
       <p class="tl-desc">Monitored and analyzed surveillance data for U.S.-based retail stores, identifying operational patterns that contributed to improved client satisfaction and business growth.</p>
     </div>
-    <div class="tl-item">
+    <div class="tl-item reveal">
       <span class="tl-date">FEB 2022 — SEP 2022</span>
       <div class="tl-role">Sales &amp; Customer Service Representative</div>
       <div class="tl-org">MBE · Karachi, PK</div>
@@ -490,10 +530,10 @@
 </section>
 
 <section id="projects">
-  <div class="sec-head"><span class="mark">//</span><h2>Projects</h2></div>
+  <div class="sec-head reveal"><span class="mark">//</span><h2>Projects</h2></div>
   <p class="sec-sub">A selection of AI, database, and cloud-deployed systems — spanning a Final Year Project through to coursework applied as production-style builds.</p>
 
-  <div class="proj-featured">
+  <div class="proj-featured reveal">
     <span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span><span class="corner c4"></span>
     <span class="proj-tag">FEATURED · FINAL YEAR PROJECT</span>
     <h3>locAIte — AI Missing Person Recovery Platform</h3>
@@ -508,25 +548,25 @@
   </div>
 
   <div class="proj-grid">
-    <div class="proj-card">
+    <div class="proj-card reveal">
       <span class="proj-tag">DBMS LAB PROJECT</span>
       <h4>Hospital Management System</h4>
       <p>Full-stack hospital records system with automated workflows for patient and data handling.</p>
       <div class="chips"><span class="chip">asp.net core mvc</span><span class="chip">ef core</span><span class="chip">n8n</span></div>
     </div>
-    <div class="proj-card">
+    <div class="proj-card reveal">
       <span class="proj-tag">OPEN-ENDED LAB</span>
       <h4>ShopEase — Order &amp; Customer Management</h4>
       <p>E-commerce database system handling order processing and customer records at scale.</p>
       <div class="chips"><span class="chip">sql server</span><span class="chip">asp.net core mvc</span></div>
     </div>
-    <div class="proj-card">
+    <div class="proj-card reveal">
       <span class="proj-tag">CLOUD / PDC PROJECT</span>
       <h4>CloudScale — AWS Web App Deployment</h4>
       <p>Web application deployed on EC2 with a load balancer configured for scalability and fault tolerance.</p>
       <div class="chips"><span class="chip">aws ec2</span><span class="chip">load balancer</span></div>
     </div>
-    <div class="proj-card">
+    <div class="proj-card reveal">
       <span class="proj-tag">FULL-STACK BUILD</span>
       <h4>Library Management System</h4>
       <p>Book cataloging, member management, and issue/return tracking with a normalized database schema.</p>
@@ -536,29 +576,29 @@
 </section>
 
 <section id="skills">
-  <div class="sec-head"><span class="mark">//</span><h2>Skills</h2></div>
+  <div class="sec-head reveal"><span class="mark">//</span><h2>Skills</h2></div>
   <div class="skill-groups">
-    <div class="skill-group">
+    <div class="skill-group reveal">
       <h4>AI / ML &amp; AUTOMATION</h4>
       <div class="skill-tags"><span>Facial Recognition</span><span>MTCNN</span><span>FaceNet</span><span>NLP</span><span>n8n Automation</span></div>
     </div>
-    <div class="skill-group">
+    <div class="skill-group reveal">
       <h4>.NET &amp; BACKEND</h4>
       <div class="skill-tags"><span>ASP.NET Core MVC</span><span>Entity Framework Core</span><span>Python</span></div>
     </div>
-    <div class="skill-group">
+    <div class="skill-group reveal">
       <h4>FRONTEND</h4>
       <div class="skill-tags"><span>JavaScript</span><span>React.js</span><span>HTML5 / CSS3</span></div>
     </div>
-    <div class="skill-group">
+    <div class="skill-group reveal">
       <h4>DATABASES</h4>
       <div class="skill-tags"><span>SQL Server</span><span>MySQL</span><span>Oracle</span><span>MongoDB</span></div>
     </div>
-    <div class="skill-group">
+    <div class="skill-group reveal">
       <h4>CLOUD &amp; PLATFORMS</h4>
       <div class="skill-tags"><span>AWS EC2</span><span>Load Balancer</span><span>WordPress</span><span>Power BI</span></div>
     </div>
-    <div class="skill-group">
+    <div class="skill-group reveal">
       <h4>WORKING STYLE</h4>
       <div class="skill-tags"><span>Time Management</span><span>Task Collaboration</span><span>Problem Solving</span></div>
     </div>
@@ -566,34 +606,34 @@
 </section>
 
 <section id="education">
-  <div class="sec-head"><span class="mark">//</span><h2>Education &amp; Certifications</h2></div>
+  <div class="sec-head reveal"><span class="mark">//</span><h2>Education &amp; Certifications</h2></div>
   <div class="edu-cert-grid">
     <div>
-      <div class="edu-item">
+      <div class="edu-item reveal">
         <span class="tl-date">2022 — 2026</span>
         <div class="tl-role">B.S. Computer Science</div>
         <div class="tl-org">Iqra University, Karachi</div>
       </div>
-      <div class="edu-item">
+      <div class="edu-item reveal">
         <span class="tl-date">2019 — 2022</span>
         <div class="tl-role">Intermediate, Pre-Engineering</div>
         <div class="tl-org">Govt. Degree College of Boys, Gulistan-e-Jauhar</div>
       </div>
-      <div class="edu-item">
+      <div class="edu-item reveal">
         <span class="tl-date">2013 — 2019</span>
         <div class="tl-role">Matriculation, Science</div>
         <div class="tl-org">S.M. Public Academy</div>
       </div>
     </div>
     <div>
-      <div class="cert-item"><span class="name">Responsive Web Design</span><span class="issuer">freeCodeCamp</span></div>
-      <div class="cert-item"><span class="name">JavaScript Algorithms and Data Structures</span><span class="issuer">freeCodeCamp</span></div>
+      <div class="cert-item reveal"><span class="name">Responsive Web Design</span><span class="issuer">freeCodeCamp</span></div>
+      <div class="cert-item reveal"><span class="name">JavaScript Algorithms and Data Structures</span><span class="issuer">freeCodeCamp</span></div>
     </div>
   </div>
 </section>
 
 <section id="contact">
-  <div class="contact-box">
+  <div class="contact-box reveal">
     <h2>Let's build something intelligent together.</h2>
     <div class="contact-links">
       <a class="mono-link" href="mailto:meetmahad09@gmail.com">meetmahad09@gmail.com</a>
@@ -666,6 +706,90 @@
   closeBtn.addEventListener('click', closeModal);
   modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+  /* ---- scroll reveal ---- */
+  const revealEls = document.querySelectorAll('.reveal');
+  revealEls.forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + 'ms'; });
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => revealObserver.observe(el));
+
+  /* ---- animated stat counters ---- */
+  const counters = document.querySelectorAll('.num[data-count]');
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.getAttribute('data-count'), 10);
+        const suffix = el.getAttribute('data-suffix') || '';
+        const duration = 1100;
+        const start = performance.now();
+        function tick(now){
+          const p = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(eased * target) + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(el => counterObserver.observe(el));
+
+  /* ---- cursor glow in hero ---- */
+  const heroEl = document.querySelector('.hero');
+  const glow = document.getElementById('cursorGlow');
+  if (heroEl && glow && matchMedia('(hover: hover)').matches){
+    heroEl.addEventListener('mousemove', (e) => {
+      const rect = heroEl.getBoundingClientRect();
+      glow.style.left = (e.clientX - rect.left) + 'px';
+      glow.style.top = (e.clientY - rect.top) + 'px';
+      glow.style.opacity = '1';
+    });
+    heroEl.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+  }
+
+  /* ---- cycling word typewriter ---- */
+  const cycleEl = document.getElementById('cycleWord');
+  if (cycleEl){
+    const words = ['facial recognition', 'workflow automation', '.NET systems', 'applied AI'];
+    let wi = 0, ci = 0, deleting = false;
+    function typeLoop(){
+      const word = words[wi];
+      if (!deleting){
+        ci++;
+        cycleEl.textContent = word.slice(0, ci);
+        if (ci === word.length){ deleting = true; setTimeout(typeLoop, 1400); return; }
+        setTimeout(typeLoop, 55);
+      } else {
+        ci--;
+        cycleEl.textContent = word.slice(0, ci);
+        if (ci === 0){ deleting = false; wi = (wi + 1) % words.length; setTimeout(typeLoop, 250); return; }
+        setTimeout(typeLoop, 30);
+      }
+    }
+    setTimeout(typeLoop, 900);
+  }
+
+  /* ---- project card tilt ---- */
+  if (matchMedia('(hover: hover)').matches){
+    document.querySelectorAll('.proj-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `translateY(-4px) perspective(600px) rotateX(${(-y * 6).toFixed(2)}deg) rotateY(${(x * 8).toFixed(2)}deg)`;
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+  }
 
   document.querySelectorAll('.mr-copy').forEach(btn => {
     btn.addEventListener('click', async () => {
